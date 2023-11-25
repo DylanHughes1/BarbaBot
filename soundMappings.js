@@ -5,6 +5,7 @@ const soundMappings = {
     'daleVoli': './sounds/daleVoli.mp3',
     'oneDay': './sounds/oneDay.mp3',
     'pro': './sounds/pro.mp3',
+    'loMismo': './sounds/loMismo.mp3',
   };
   
   module.exports = soundMappings;
