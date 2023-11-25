@@ -1,6 +1,6 @@
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
-const { createAudioPlayer, createAudioResource, joinVoiceChannel } = require('@discordjs/voice');
-const soundMappings = require('./soundMappings.js'); 
+const { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus } = require('@discordjs/voice');
+const soundMappings = require('./soundMappings.js');
 require('dotenv').config();
 
 
@@ -14,6 +14,7 @@ const client = new Client({
 });
 
 const audioPlayer = createAudioPlayer();
+const queues = new Map();
 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
@@ -37,12 +38,32 @@ client.on('messageCreate', async (message) => {
       if (soundMappings[command]) {
         const soundPath = soundMappings[command];
 
-        try {
-          const audioResource = createAudioResource(soundPath);
-          audioPlayer.play(audioResource);
+        let queue = queues.get(message.guild.id);
+
+        if (!queue) {
+          // Si no hay cola, crea una nueva
+          queue = [];
+          queues.set(message.guild.id, queue);
+
+          // Escucha los eventos del reproductor de audio
+          audioPlayer.on(AudioPlayerStatus.Idle, () => {
+            // Cuando el reproductor esté inactivo, revisa si hay más elementos en la cola
+            const nextSound = queue.shift();
+            if (nextSound) {
+              // Reproduce el siguiente sonido en la cola
+              audioPlayer.play(nextSound);
+            } 
+          });
+        }
+
+        // Agrega el sonido a la cola
+        const audioResource = createAudioResource(soundPath);
+        queue.push(audioResource);
+
+        // Si el reproductor no está reproduciendo nada, comienza la reproducción
+        if (audioPlayer.state.status !== AudioPlayerStatus.Playing) {
+          audioPlayer.play(queue.shift());
           connection.subscribe(audioPlayer);
-        } catch (error) {
-          console.error('Error al reproducir el sonido:', error);
         }
       } else {
         message.reply('Cuando vemos que no es ninguna novedad que escriban mal el comando');
