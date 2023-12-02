@@ -3,7 +3,7 @@ const { EmbedBuilder } = require('discord.js');
 function helpCommand(message) {
     const exampleEmbed = new EmbedBuilder()
       .setColor(0x0099FF)
-      .setTitle('BabarBot')
+      .setTitle('BarbaBot')
       .setURL('https://github.com/DylanHughes1/BarbaBot')
       .setAuthor({ name: 'Dylan Hughes' })
       .setDescription('Bienvenidos al bot de Barbakahn. Para reproducir un sonido, escriba "!play" y el nombre del sonido. Para ver la lista de sonidos, escriba "!sounds". ')

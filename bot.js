@@ -6,7 +6,6 @@ const soundsCommand = require('./commands/sounds');
 const helpCommand = require('./commands/help');
 require('dotenv').config();
 
-
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
