@@ -1,10 +1,19 @@
-const { Client, GatewayIntentBits} = require('discord.js');
-const { createAudioPlayer} = require('@discordjs/voice');
+const { Client, GatewayIntentBits } = require('discord.js');
+const { createAudioPlayer } = require('@discordjs/voice');
 const soundMappings = require('./soundMappings.js');
 const playCommand = require('./commands/play');
 const soundsCommand = require('./commands/sounds');
 const helpCommand = require('./commands/help');
 require('dotenv').config();
+const express = require('express')
+const app = express();
+const port = 3000
+
+app.get('/', (req, res) => res.send('Bot is now running!!'))
+
+app.listen(port, () =>
+  console.log(`Your app is listening a http://localhost:${port}`)
+);
 
 const client = new Client({
   intents: [
