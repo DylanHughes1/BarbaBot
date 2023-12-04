@@ -37,6 +37,43 @@ function playCommand(message, queues, soundMappings, audioPlayer) {
       if (audioPlayer.state.status !== AudioPlayerStatus.Playing) {
         audioPlayer.play(queue.shift());
         connection.subscribe(audioPlayer);
+
+        // Start inactivity timer
+        let inactivityTimer = setTimeout(() => {
+          if (audioPlayer.state.status === AudioPlayerStatus.Idle) {
+            connection.disconnect();
+            console.log('Disconnecting bot due to inactivity');
+          }
+        }, 60000); // Disconnect after 60 seconds (1 minute)
+
+        // Reset inactivity timer on activity (e.g., playing, pausing, queueing)
+        audioPlayer.on(AudioPlayerStatus.Playing, () => {
+          clearTimeout(inactivityTimer);
+          inactivityTimer = setTimeout(() => {
+            if (audioPlayer.state.status === AudioPlayerStatus.Idle) {
+              connection.disconnect();
+              console.log('Disconnecting bot due to inactivity');
+            }
+          }, 60000);
+        });
+        audioPlayer.on(AudioPlayerStatus.Paused, () => {
+          clearTimeout(inactivityTimer);
+          inactivityTimer = setTimeout(() => {
+            if (audioPlayer.state.status === AudioPlayerStatus.Idle) {
+              connection.disconnect();
+              console.log('Disconnecting bot due to inactivity');
+            }
+          }, 60000);
+        });
+        audioPlayer.on(AudioPlayerStatus.QueueEnd, () => {
+          clearTimeout(inactivityTimer);
+          inactivityTimer = setTimeout(() => {
+            if (audioPlayer.state.status === AudioPlayerStatus.Idle) {
+              connection.disconnect();
+              console.log('Disconnecting bot due to inactivity');
+            }
+          }, 60000);
+        });
       }
     } else {
       message.reply('Cuando vemos que no es ninguna novedad que escriban mal el comando');
