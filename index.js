@@ -27,6 +27,12 @@ const client = new Client({
 const audioPlayer = createAudioPlayer();
 const queues = new Map();
 
+client.on('ready', () => {
+  console.log('Bot listo!');
+
+  client.user.setActivity('barbabot | !help', { type: 'PLAYING' })
+});
+
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
 
