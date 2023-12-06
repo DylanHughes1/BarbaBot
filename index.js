@@ -27,10 +27,18 @@ const client = new Client({
 const audioPlayer = createAudioPlayer();
 const queues = new Map();
 
-client.on('ready', () => {
+client.once('ready', () => {
   console.log('Bot listo!');
 
-  client.user.setActivity('barbabot | !help', { type: 'PLAYING' })
+  // Establece el estado del bot cuando está listo
+  client.user.setPresence({
+    activities: [
+      {
+        name: 'barbabot | !help',
+        type: 'PLAYING',
+      },
+    ],
+  });
 });
 
 client.on('messageCreate', async (message) => {
