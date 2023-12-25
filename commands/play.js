@@ -1,8 +1,10 @@
-const { createAudioResource, joinVoiceChannel, AudioPlayerStatus } = require('@discordjs/voice');
-
+const {
+  createAudioResource,
+  joinVoiceChannel,
+  AudioPlayerStatus,
+} = require("@discordjs/voice");
 
 function playCommand(message, queues, soundMappings, audioPlayer) {
-
   const voiceChannel = message.member.voice.channel;
 
   if (voiceChannel) {
@@ -12,7 +14,7 @@ function playCommand(message, queues, soundMappings, audioPlayer) {
       adapterCreator: voiceChannel.guild.voiceAdapterCreator,
     });
 
-    const command = message.content.split(' ')[1];
+    const command = message.content.split(" ")[1];
 
     if (soundMappings[command]) {
       const soundPath = soundMappings[command];
@@ -42,7 +44,7 @@ function playCommand(message, queues, soundMappings, audioPlayer) {
         let inactivityTimer = setTimeout(() => {
           if (audioPlayer.state.status === AudioPlayerStatus.Idle) {
             connection.disconnect();
-            console.log('Disconnecting bot due to inactivity');
+            console.log("Disconnecting bot due to inactivity");
           }
         }, 60000); // Disconnect after 60 seconds (1 minute)
 
@@ -52,7 +54,7 @@ function playCommand(message, queues, soundMappings, audioPlayer) {
           inactivityTimer = setTimeout(() => {
             if (audioPlayer.state.status === AudioPlayerStatus.Idle) {
               connection.disconnect();
-              console.log('Disconnecting bot due to inactivity');
+              console.log("Disconnecting bot due to inactivity");
             }
           }, 60000);
         });
@@ -61,7 +63,7 @@ function playCommand(message, queues, soundMappings, audioPlayer) {
           inactivityTimer = setTimeout(() => {
             if (audioPlayer.state.status === AudioPlayerStatus.Idle) {
               connection.disconnect();
-              console.log('Disconnecting bot due to inactivity');
+              console.log("Disconnecting bot due to inactivity");
             }
           }, 60000);
         });
@@ -70,16 +72,18 @@ function playCommand(message, queues, soundMappings, audioPlayer) {
           inactivityTimer = setTimeout(() => {
             if (audioPlayer.state.status === AudioPlayerStatus.Idle) {
               connection.disconnect();
-              console.log('Disconnecting bot due to inactivity');
+              console.log("Disconnecting bot due to inactivity");
             }
           }, 60000);
         });
       }
     } else {
-      message.reply('Cuando vemos que no es ninguna novedad que escriban mal el comando');
+      message.reply(
+        "Cuando vemos que no es ninguna novedad que escriban mal el comando",
+      );
     }
   } else {
-    message.reply('Debes estar en un canal de voz para usar este comando');
+    message.reply("Debes estar en un canal de voz para usar este comando");
   }
 }
 
