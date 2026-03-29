@@ -5,9 +5,14 @@ const playCommand = require('./commands/play');
 const soundsCommand = require('./commands/sounds');
 const helpCommand = require('./commands/help');
 require('dotenv').config();
+const ffmpegPath = require('ffmpeg-static');
 const express = require('express')
 const app = express();
 const port = 3000
+
+if (ffmpegPath) {
+  process.env.FFMPEG_PATH = ffmpegPath;
+}
 
 app.get('/', (req, res) => res.send('Bot is now running!!'))
 
@@ -27,7 +32,7 @@ const client = new Client({
 const audioPlayer = createAudioPlayer();
 const queues = new Map();
 
-client.once('ready', () => {
+client.once('clientReady', () => {
   console.log('Bot listo!');
 
   // Establece el estado del bot cuando está listo
